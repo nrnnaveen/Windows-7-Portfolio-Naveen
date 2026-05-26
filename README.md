@@ -2,9 +2,8 @@
 
 A Windows 7-style interactive portfolio website with desktop apps, start menu navigation, and portfolio sections rendered as in-window pages.
 
-## Run locally
+http://nrnnaveen.github.io/Windows-7-Portfolio-Naveen/
 
-This is a static site, so you can run it with any local server.
 
 ## Features
 
