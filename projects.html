@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects</title>
+    <link rel="stylesheet" href="css/apps.css">
+    <style>
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .project-card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 15px;
+            background: #f9f9f9;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .project-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border-color: #0066cc;
+        }
+        .project-title {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 5px;
+            color: #003366;
+            word-wrap: break-word;
+        }
+        .project-lang {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 10px;
+            display: inline-block;
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        .project-desc {
+            font-size: 13px;
+            color: #444;
+            margin-bottom: 10px;
+        }
+        .project-link {
+            font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+        }
+        .project-link svg {
+            width: 14px;
+            height: 14px;
+            margin-right: 4px;
+        }
+
+        @media (max-width: 720px) {
+            .projects-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .project-card {
+                padding: 12px;
+            }
+        }
+    </style>
+    <link rel="icon" type="image/png" href="https://res.cloudinary.com/db6dqsq9i/image/upload/v1779719390/Naveen_bhenll.jpg"/>
+</head>
+<body>
+    <div class="container">
+        <h1>My Projects</h1>
+        <p>Projects I Build For Hackathons,Expos.</p>
+        
+        <div class="projects-grid" id="projects-container">
+            <!-- Populated via JS -->
+        </div>
+    </div>
+
+    <script>
+    const projects = [
+        {
+            name: "Guardian-AI",
+            lang: "Python, AI/ML",
+            desc: "An intelligent student safety and monitoring system designed to predict and reduce dropout rates using real-time alerts and predictive analytics."
+        },
+
+        {
+            name: "SQL-Mobile-Playground",
+            lang: "SQL, Mobile Development",
+            desc: "An interactive mobile application that allows users to write, execute, and experiment with SQL queries in a hands-on learning environment."
+        },
+
+        {
+            name: "AI-Voice-Model-Offline",
+            lang: "Python, AI",
+            desc: "A lightweight offline-capable voice recognition system engineered for local AI inference without internet connectivity."
+        },
+
+        {
+            name: "All-Cutoff-Calculator",
+            lang: "Python, Web",
+            desc: "A precision-based academic cutoff calculator developed for Tamil Nadu entrance systems with accurate score computation."
+        },
+
+        {
+            name: "Frequency-Analysis-App",
+            lang: "Python, Data Analysis",
+            desc: "A statistical data analysis application capable of performing frequency analysis for pattern recognition and data interpretation."
+        },
+
+        {
+            name: "Gen-AI",
+            lang: "Python, Generative AI",
+            desc: "An exploratory Generative AI project integrating intelligent context-aware response generation and advanced AI capabilities."
+        },
+
+    
+        
+    ];
+
+    const container = document.getElementById('projects-container');
+
+    projects.forEach(proj => {
+
+        const card = document.createElement('div');
+
+        card.className = 'project-card';
+
+        card.innerHTML = `
+            <div class="project-title">
+                ${proj.name.replace(/-/g, ' ')}
+            </div>
+
+            <div class="project-lang">
+                ${proj.lang}
+            </div>
+
+            <div class="project-desc">
+                ${proj.desc}
+            </div>
+
+            <a href="https://github.com/nrnnaveen/${proj.name}" 
+               target="_blank" 
+               class="project-link">
+
+                <svg viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2">
+
+                    <path d="M9 19c-5 1.5-5-2.5-7-3
+                             m14 6v-3.87
+                             a3.37 3.37 0 0 0-.94-2.61
+                             c3.14-.35 6.44-1.54 6.44-7
+                             A5.44 5.44 0 0 0 20 4.77
+                             5.07 5.07 0 0 0 19.91 1
+                             S18.73.65 16 2.48
+                             a13.38 13.38 0 0 0-7 0
+                             C6.27.65 5.09 1 5.09 1
+                             A5.07 5.07 0 0 0 5 4.77
+                             a5.44 5.44 0 0 0-1.5 3.78
+                             c0 5.42 3.3 6.61 6.44 7
+                             A3.37 3.37 0 0 0 9 18.13V22">
+                    </path>
+
+                </svg>
+
+                View on GitHub
+            </a>
+        `;
+
+        container.appendChild(card);
+    });
+        </script>
+    </body>
+ </html>
