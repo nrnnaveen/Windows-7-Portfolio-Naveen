@@ -1,0 +1,38 @@
+/* General styles for iframe apps */
+body {
+    background: #fff;
+    color: #333;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    padding: 20px;
+    margin: 0;
+    overflow-y: auto;
+}
+
+h1, h2, h3 {
+    color: #003366;
+    margin-top: 0;
+}
+
+a {
+    color: #0066cc;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+@media (max-width: 640px) {
+    body {
+        padding: 12px;
+    }
+
+    .container {
+        max-width: none;
+    }
+}
