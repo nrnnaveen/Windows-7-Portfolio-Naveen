@@ -94,7 +94,11 @@ Copyright (c) 2009 Microsoft Corporation.  All rights reserved.
 
                 // Echo prompt and command
                 const log = document.createElement('div');
-                log.innerHTML = `<span style="color:#0f0;">C:\\Users\\Naveen&gt;</span> ${outCmd}`;
+                const promptText = document.createElement('span');
+                promptText.style.color = '#0f0';
+                promptText.textContent = 'C:\\Users\\Naveen> ';
+                log.appendChild(promptText);
+                log.appendChild(document.createTextNode(outCmd));
                 output.appendChild(log);
 
                 if (cmd === '') return;
