@@ -1,5 +1,5 @@
 const WindowManager = {
-    windows: [], // Array of open windows { id, appId, el, zIndex, minimized, maximized }
+    windows: [], // Array of open windows { id, appId, zIndex, minimized, maximized }
     activeZIndex: 100,
     isCompactViewport() {
         return window.matchMedia('(max-width: 820px)').matches;

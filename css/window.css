@@ -219,7 +219,7 @@
     opacity: 1;
 }
 
-/* Resizing handles */
+/* Resizing handle */
 .resizer {
     position: absolute;
     z-index: 10;

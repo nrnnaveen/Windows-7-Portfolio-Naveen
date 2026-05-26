@@ -363,7 +363,7 @@ const Desktop = {
         const baseTitle = type === 'folder' ? 'New Folder' : 'New Text Document';
         const rawTitle = isShortcut ? `${baseTitle} - Shortcut` : baseTitle;
         
-        // Find existing copies to append (2), (3) etc.
+        // Find existing copies to append (2), (3) 
         let copyNumber = 0;
         let title = rawTitle;
         

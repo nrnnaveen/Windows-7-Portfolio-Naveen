@@ -6,7 +6,7 @@ const TaskBar = {
             this.toggleStartMenu();
         });
 
-        // Keep taskbar clock + widget clock live
+        // Keep taskbar clock  widget clock live
         this.updateClock();
         setInterval(() => this.updateClock(), 1000);
 

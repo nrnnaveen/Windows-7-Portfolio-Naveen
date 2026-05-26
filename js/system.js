@@ -2,7 +2,7 @@
 function getIconSvg(type) {
     const xmlns = 'xmlns="http://www.w3.org/2000/svg"';
     
-    // Complex, multi-layered SVGs to mimic Windows 7 3D/Aero look
+    // Complex, multi-layered SVGs to mimic Windows 7  look
     const icons = {
         'computer': `<svg ${xmlns} viewBox="0 0 64 64">
             <defs>
