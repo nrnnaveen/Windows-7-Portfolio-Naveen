@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="css/apps.css">
+    <style>
+        .panel {
+            border: 1px solid #d4dce7;
+            background: #fff;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .panel-head {
+            background: linear-gradient(to bottom, #f4f8fd 0%, #e7eef9 100%);
+            border-bottom: 1px solid #d4dce7;
+            padding: 10px 12px;
+            font-size: 13px;
+            color: #244a7c;
+            font-weight: 600;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #edf1f7;
+            text-align: left;
+        }
+        th {
+            background: #f8fbff;
+            font-weight: 600;
+            color: #325680;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+    </style>
+    <link rel="icon" type="image/png" href="https://res.cloudinary.com/db6dqsq9i/image/upload/v1779719390/Naveen_bhenll.jpg"/>
+</head>
+<body>
+    <div class="container">
+        <h1>Task Manager</h1>
+        <div class="panel">
+            <div class="panel-head">Running Applications</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Application</th>
+                        <th>Status</th>
+                        <th>Memory</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Desktop Shell</td><td>Running</td><td>72 MB</td></tr>
+                    <tr><td>Explorer</td><td>Running</td><td>48 MB</td></tr>
+                    <tr><td>Portfolio Apps</td><td>Running</td><td id="apps-memory">36 MB</td></tr>
+                    <tr><td>Clock Service</td><td>Running</td><td>9 MB</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        const memoryCell = document.getElementById('apps-memory');
+        setInterval(() => {
+            memoryCell.textContent = `${34 + Math.floor(Math.random() * 6)} MB`;
+        }, 2500);
+    </script>
+</body>
+</html>
