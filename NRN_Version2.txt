@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NRN AI</title>
+  <style>
+    :root{
+      --bg:#0f1115;
+      --panel:#161b26;
+      --panel2:#101522;
+      --text:#e9efff;
+      --muted:#a4b0c7;
+      --accent:#7c5cff;
+      --border:rgba(255,255,255,.08);
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 500px at 40% 0%, rgba(124,92,255,.25), var(--bg) 55%);
+      color:var(--text);
+      height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+    }
+    .window{
+      width:min(980px, 100%);
+      height:min(720px, 100%);
+      display:flex;
+      flex-direction:column;
+      border-radius:14px;
+      overflow:hidden;
+      border:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      box-shadow: 0 20px 60px rgba(0,0,0,.45);
+    }
+    .top{
+      padding:12px 14px;
+      background:rgba(0,0,0,.22);
+      border-bottom:1px solid var(--border);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .title{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+      user-select:none;
+    }
+    .title h1{
+      margin:0;
+      font-size:14px;
+      font-weight:700;
+      letter-spacing:.2px;
+    }
+    .title .sub{
+      font-size:12px;
+      color:var(--muted);
+    }
+    .btn{
+      appearance:none;
+      border:1px solid var(--border);
+      background:var(--panel2);
+      color:var(--text);
+      height:34px;
+      padding:0 12px;
+      border-radius:10px;
+      cursor:pointer;
+      font-size:13px;
+    }
+    .btn:active{ transform:translateY(1px); }
+    .btn.primary{ border-color: rgba(124,92,255,.45); }
+    .main{
+      flex:1;
+      display:flex;
+      gap:0;
+      min-height:0;
+    }
+    .sidebar{
+      width:270px;
+      border-right:1px solid var(--border);
+      background: rgba(0,0,0,.18);
+      padding:12px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .card{
+      background:rgba(0,0,0,.22);
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:12px;
+    }
+    .card h3{ margin:0 0 8px; font-size:13px; }
+    .card p{ margin:0; color:var(--muted); font-size:12px; line-height:1.35; }
+    .pill{
+      display:inline-block;
+      margin-top:8px;
+      font-size:12px;
+      color:var(--muted);
+      border:1px solid var(--border);
+      border-radius:999px;
+      padding:3px 8px;
+    }
+    .chat{
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      min-width:0;
+      min-height:0;
+      background:var(--panel);
+    }
+    .messages{
+      flex:1;
+      overflow:auto;
+      padding:14px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .msg{
+      max-width: 82%;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      line-height:1.45;
+      white-space:pre-wrap;
+      word-wrap:break-word;
+      font-size:13px;
+    }
+    .me{
+      align-self:flex-end;
+      background: rgba(124,92,255,.14);
+      border-color: rgba(124,92,255,.30);
+    }
+    .ai{
+      align-self:flex-start;
+      background: rgba(255,255,255,.04);
+    }
+    .typing{
+      color:var(--muted);
+      font-size:12px;
+      padding:0 14px 10px;
+      height:22px;
+    }
+    .composer{
+      border-top:1px solid var(--border);
+      padding:12px;
+      display:flex;
+      gap:10px;
+      background:rgba(0,0,0,.18);
+    }
+    textarea{
+      flex:1;
+      resize:none;
+      height:42px;
+      max-height:140px;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:var(--panel2);
+      color:var(--text);
+      outline:none;
+      font-size:13px;
+      line-height:1.35;
+    }
+  </style>
+</head>
+<body>
+  <div class="window">
+    <div class="top">
+      <div class="title">
+        <h1>NRN AI Assistant</h1>
+        <div class="sub">Demo mode (offline). Upgrade to Gemini via secure backend proxy.</div>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <button class="btn" id="exportBtn">Export Chat</button>
+        <button class="btn" id="clearBtn">Clear</button>
+      </div>
+    </div>
+
+    <div class="main">
+      <aside class="sidebar">
+        <div class="card">
+          <h3>Quick commands</h3>
+          <p>Try:</p>
+          <p class="pill">help</p>
+          <p class="pill">apps</p>
+          <p class="pill">about</p>
+          <p class="pill">time</p>
+        </div>
+        <div class="card">
+          <h3>Notes</h3>
+          <p>This assistant is safe for GitHub Pages (no API keys).</p>
+        </div>
+      </aside>
+
+      <section class="chat">
+        <div class="messages" id="messages"></div>
+        <div class="typing" id="typing"></div>
+
+        <div class="composer">
+          <textarea id="input" placeholder="Ask NRN AI something... (Shift+Enter for new line)"></textarea>
+          <button class="btn primary" id="sendBtn">Send</button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'nrn_ai_chat_v1';
+
+    const messagesEl = document.getElementById('messages');
+    const typingEl = document.getElementById('typing');
+    const inputEl = document.getElementById('input');
+    const sendBtn = document.getElementById('sendBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const exportBtn = document.getElementById('exportBtn');
+
+    /** @type {{role:'me'|'ai', text:string, ts:number}[]} */
+    let chat = [];
+
+    function nowTime(){
+      const d = new Date();
+      return d.toLocaleString();
+    }
+
+    function save(){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(chat));
+    }
+
+    function load(){
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        chat = raw ? JSON.parse(raw) : [];
+      }catch{
+        chat = [];
+      }
+    }
+
+    function addMessage(role, text){
+      chat.push({ role, text, ts: Date.now() });
+      save();
+      render();
+    }
+
+    function render(){
+      messagesEl.innerHTML = '';
+      for(const m of chat){
+        const div = document.createElement('div');
+        div.className = 'msg ' + (m.role === 'me' ? 'me' : 'ai');
+        div.textContent = m.text;
+        messagesEl.appendChild(div);
+      }
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    function setTyping(on){
+      typingEl.textContent = on ? 'NRN AI is typing…' : '';
+    }
+
+    function demoBrain(userText){
+      const t = (userText || '').trim().toLowerCase();
+
+      if(t === 'help'){
+        return [
+          "Commands:",
+          "- help: show commands",
+          "- apps: ideas for Windows 7 apps",
+          "- about: what this assistant is",
+          "- time: current device time",
+          "",
+          "Tip: Ask: 'suggest new apps' or 'how to add mini chrome app'."
+        ].join('\n');
+      }
+
+      if(t === 'about'){
+        return "I’m NRN AI (demo). I can run fully in your HTML portfolio without any API keys. If you want real Gemini responses, add a secure backend proxy so your key stays hidden.";
+      }
+
+      if(t === 'time'){
+        return "Your current device time is: " + nowTime();
+      }
+
+      if(t === 'apps' || t.includes('suggest') || t.includes('apps')){
+        return [
+          "More Windows-style apps you can add (HTML/JS):",
+          "1) Run dialog (Win+R) to launch apps",
+          "2) Recycle Bin with restore/empty",
+          "3) Task Manager listing open windows",
+          "4) File Explorer with folders + file types",
+          "5) Windows Media Player mini",
+          "",
+          "If you tell me your app folder names, I can generate a Start Menu + Run command map."
+        ].join('\n');
+      }
+
+      if(t.includes('chrome') || t.includes('browser')){
+        return [
+          "Mini browser tips:",
+          "- Use an iframe for internal pages.",
+          "- Many external sites block iframe embedding (normal).",
+          "- Provide 'Open in real browser' button using window.open(url).",
+          "",
+          "Your chrome.html I gave you is built this way."
+        ].join('\n');
+      }
+
+      if(t.includes('gemini') || t.includes('api key')){
+        return [
+          "To use Gemini safely:",
+          "- DO NOT put the key in frontend JS (it will leak).",
+          "- Use a free backend proxy (Cloudflare Worker / Vercel Function).",
+          "- Your HTML calls your proxy; proxy calls Gemini.",
+          "",
+          "Reply: 'I can use Cloudflare Worker' and I’ll send exact code."
+        ].join('\n');
+      }
+
+      return "I can help. Try 'apps' for ideas, or tell me what you want to add next (browser, control panel, explorer, task manager, etc.).";
+    }
+
+    async function send(){
+      const text = inputEl.value.trim();
+      if(!text) return;
+
+      inputEl.value = '';
+      addMessage('me', text);
+
+      setTyping(true);
+      // Simulate thinking
+      await new Promise(r => setTimeout(r, 450));
+
+      const reply = demoBrain(text);
+      addMessage('ai', reply);
+      setTyping(false);
+    }
+
+    sendBtn.addEventListener('click', send);
+    inputEl.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter' && !e.shiftKey){
+        e.preventDefault();
+        send();
+      }
+    });
+
+    clearBtn.addEventListener('click', () => {
+      if(confirm('Clear chat history?')){
+        chat = [];
+        save();
+        render();
+      }
+    });
+
+    exportBtn.addEventListener('click', () => {
+      const blob = new Blob([JSON.stringify(chat, null, 2)], {type:'application/json'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'nrn-ai-chat.json';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+
+    // init
+    load();
+    if(!chat.length){
+      addMessage('ai', "Hi! I’m NRN AI (demo). Type 'help' to see commands.");
+    } else {
+      render();
+    }
+  </script>
+</body>
+</html>

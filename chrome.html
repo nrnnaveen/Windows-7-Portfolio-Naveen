@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NRN Chrome</title>
+  <style>
+    :root{
+      --bg:#0f1115;
+      --panel:#1a1f2b;
+      --panel2:#111521;
+      --text:#e8eefc;
+      --muted:#9aa7c2;
+      --accent:#4a8cff;
+      --danger:#ff4a4a;
+      --border:rgba(255,255,255,.08);
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 500px at 40% 0%, #1b2a55 0%, var(--bg) 60%);
+      color:var(--text);
+      height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+    }
+    .window{
+      width:min(1100px, 100%);
+      height:min(720px, 100%);
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border:1px solid var(--border);
+      border-radius:14px;
+      overflow:hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,.45);
+      display:flex;
+      flex-direction:column;
+    }
+    .titlebar{
+      padding:10px 12px;
+      background:rgba(0,0,0,.25);
+      display:flex;
+      align-items:center;
+      gap:10px;
+      border-bottom:1px solid var(--border);
+    }
+    .dots{ display:flex; gap:8px; }
+    .dot{ width:10px; height:10px; border-radius:50%; background:#3a3f4b; }
+    .dot.red{ background:#ff5f57; }
+    .dot.yellow{ background:#febc2e; }
+    .dot.green{ background:#28c840; }
+    .title{
+      font-weight:600;
+      color:var(--muted);
+      font-size:13px;
+      user-select:none;
+    }
+
+    .toolbar{
+      padding:10px 12px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      background:var(--panel);
+      border-bottom:1px solid var(--border);
+    }
+    .btn{
+      appearance:none;
+      border:1px solid var(--border);
+      background:var(--panel2);
+      color:var(--text);
+      height:34px;
+      padding:0 10px;
+      border-radius:10px;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size:13px;
+    }
+    .btn:disabled{ opacity:.45; cursor:not-allowed; }
+    .btn.primary{ border-color:rgba(74,140,255,.35); }
+    .btn.danger{ border-color:rgba(255,74,74,.35); color:#ffd4d4; }
+
+    .addr{
+      flex:1;
+      display:flex;
+      gap:8px;
+      align-items:center;
+      background:var(--panel2);
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:6px 10px;
+      height:34px;
+    }
+    .addr input{
+      flex:1;
+      border:none;
+      outline:none;
+      background:transparent;
+      color:var(--text);
+      font-size:13px;
+    }
+    .badge{
+      font-size:12px;
+      color:var(--muted);
+      border:1px solid var(--border);
+      padding:3px 8px;
+      border-radius:999px;
+      user-select:none;
+    }
+
+    .tabs{
+      display:flex;
+      gap:8px;
+      padding:8px 12px;
+      background:rgba(0,0,0,.18);
+      border-bottom:1px solid var(--border);
+      overflow:auto;
+    }
+    .tab{
+      min-width:190px;
+      max-width:260px;
+      flex:0 0 auto;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.04);
+      border-radius:12px;
+      padding:8px 10px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .tab.active{
+      border-color:rgba(74,140,255,.45);
+      box-shadow: inset 0 0 0 1px rgba(74,140,255,.25);
+    }
+    .tab .name{
+      flex:1;
+      font-size:12.5px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      color:var(--text);
+    }
+    .tab .x{
+      border:none;
+      background:transparent;
+      color:var(--muted);
+      cursor:pointer;
+      font-size:16px;
+      line-height:1;
+      padding:0 4px;
+    }
+    .tab .x:hover{ color:var(--text); }
+
+    .content{
+      flex:1;
+      background:#0b0d12;
+      position:relative;
+    }
+    iframe{
+      width:100%;
+      height:100%;
+      border:0;
+      background:white;
+    }
+
+    .blocked{
+      position:absolute;
+      inset:0;
+      display:none;
+      padding:20px;
+      color:var(--text);
+      background: radial-gradient(900px 500px at 30% 0%, rgba(74,140,255,.22), rgba(0,0,0,.55));
+    }
+    .blocked.show{ display:block; }
+    .card{
+      max-width:760px;
+      margin:30px auto 0;
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:16px;
+    }
+    .card h2{ margin:0 0 8px; font-size:16px; }
+    .card p{ margin:0 0 10px; color:var(--muted); line-height:1.45; }
+    .card code{
+      background:rgba(255,255,255,.06);
+      border:1px solid var(--border);
+      padding:2px 6px;
+      border-radius:8px;
+    }
+    .row{ display:flex; gap:10px; flex-wrap:wrap; }
+  </style>
+</head>
+<body>
+  <div class="window">
+    <div class="titlebar">
+      <div class="dots">
+        <div class="dot red"></div>
+        <div class="dot yellow"></div>
+        <div class="dot green"></div>
+      </div>
+      <div class="title">NRN Chrome (Mini Browser)</div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" id="backBtn" title="Back">⟵</button>
+      <button class="btn" id="forwardBtn" title="Forward">⟶</button>
+      <button class="btn" id="reloadBtn" title="Reload">⟳</button>
+
+      <div class="addr">
+        <span class="badge" id="lockBadge">safe</span>
+        <input id="urlInput" placeholder="Type a URL or an internal page (e.g., ./index.html)" autocomplete="off" />
+      </div>
+
+      <button class="btn primary" id="goBtn">Go</button>
+      <button class="btn" id="newTabBtn">+ Tab</button>
+    </div>
+
+    <div class="tabs" id="tabs"></div>
+
+    <div class="content">
+      <iframe id="view" referrerpolicy="no-referrer"></iframe>
+
+      <div class="blocked" id="blocked">
+        <div class="card">
+          <h2>Site blocked from embedding</h2>
+          <p>
+            Many sites don’t allow opening inside an <code>&lt;iframe&gt;</code> due to security headers
+            (X-Frame-Options / CSP). Your mini-browser UI is fine—this is a normal web restriction.
+          </p>
+          <div class="row">
+            <button class="btn primary" id="openNewWindowBtn">Open in new tab (real browser)</button>
+            <button class="btn" id="tryAnywayBtn">Try again</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ---- Simple tab + history manager ----
+    const tabsEl = document.getElementById('tabs');
+    const iframe = document.getElementById('view');
+    const blockedEl = document.getElementById('blocked');
+
+    const urlInput = document.getElementById('urlInput');
+    const lockBadge = document.getElementById('lockBadge');
+
+    const backBtn = document.getElementById('backBtn');
+    const forwardBtn = document.getElementById('forwardBtn');
+    const reloadBtn = document.getElementById('reloadBtn');
+    const goBtn = document.getElementById('goBtn');
+    const newTabBtn = document.getElementById('newTabBtn');
+
+    const openNewWindowBtn = document.getElementById('openNewWindowBtn');
+    const tryAnywayBtn = document.getElementById('tryAnywayBtn');
+
+    const state = {
+      tabs: [],
+      activeId: null
+    };
+
+    function normalizeUrl(raw){
+      let s = (raw || '').trim();
+      if(!s) return '';
+      // Allow internal relative paths like ./apps/notepad.html
+      if (s.startsWith('./') || s.startsWith('../') || s.startsWith('/') || s.endsWith('.html')) return s;
+      // If user typed example.com, add https://
+      if(!/^https?:\/\//i.test(s)) s = 'https://' + s;
+      return s;
+    }
+
+    function updateSecurityBadge(url){
+      if (url.startsWith('https://')) {
+        lockBadge.textContent = 'secure';
+        lockBadge.style.color = '#bfe2ff';
+      } else if (url.startsWith('http://')) {
+        lockBadge.textContent = 'not secure';
+        lockBadge.style.color = '#ffd2b3';
+      } else {
+        lockBadge.textContent = 'local';
+        lockBadge.style.color = '#c9ffd6';
+      }
+    }
+
+    function setActiveTab(id){
+      state.activeId = id;
+      renderTabs();
+      const tab = state.tabs.find(t => t.id === id);
+      if(!tab) return;
+      navigate(tab.url, { pushHistory:false });
+    }
+
+    function createTab(url, title){
+      const id = crypto.randomUUID();
+      state.tabs.push({
+        id,
+        title: title || 'New Tab',
+        url: url || './index.html',
+        history: [url || './index.html'],
+        idx: 0
+      });
+      setActiveTab(id);
+    }
+
+    function closeTab(id){
+      const i = state.tabs.findIndex(t => t.id === id);
+      if(i === -1) return;
+      const wasActive = state.activeId === id;
+      state.tabs.splice(i, 1);
+      if(!state.tabs.length){
+        createTab('./index.html', 'Home');
+        return;
+      }
+      if(wasActive){
+        const next = state.tabs[Math.max(0, i - 1)];
+        setActiveTab(next.id);
+      } else {
+        renderTabs();
+      }
+    }
+
+    function currentTab(){
+      return state.tabs.find(t => t.id === state.activeId);
+    }
+
+    function renderTabs(){
+      tabsEl.innerHTML = '';
+      for(const t of state.tabs){
+        const el = document.createElement('div');
+        el.className = 'tab' + (t.id === state.activeId ? ' active' : '');
+        el.title = t.url;
+
+        const name = document.createElement('div');
+        name.className = 'name';
+        name.textContent = t.title || t.url;
+
+        const x = document.createElement('button');
+        x.className = 'x';
+        x.textContent = '×';
+        x.addEventListener('click', (e) => { e.stopPropagation(); closeTab(t.id); });
+
+        el.appendChild(name);
+        el.appendChild(x);
+        el.addEventListener('click', () => setActiveTab(t.id));
+
+        tabsEl.appendChild(el);
+      }
+
+      const tab = currentTab();
+      if(tab){
+        urlInput.value = tab.url;
+        updateSecurityBadge(tab.url);
+      }
+      updateNavButtons();
+    }
+
+    function updateNavButtons(){
+      const t = currentTab();
+      if(!t) return;
+      backBtn.disabled = (t.idx <= 0);
+      forwardBtn.disabled = (t.idx >= t.history.length - 1);
+    }
+
+    function setTabTitleFromUrl(tab, url){
+      try{
+        if(url.startsWith('./') || url.startsWith('../') || url.startsWith('/')){
+          tab.title = url.split('/').pop() || 'Local';
+        } else {
+          const u = new URL(url);
+          tab.title = u.hostname.replace(/^www\./,'');
+        }
+      }catch{
+        tab.title = 'Tab';
+      }
+    }
+
+    function navigate(rawUrl, {pushHistory=true} = {}){
+      const t = currentTab();
+      if(!t) return;
+
+      const url = normalizeUrl(rawUrl);
+      if(!url) return;
+
+      blockedEl.classList.remove('show');
+
+      t.url = url;
+      setTabTitleFromUrl(t, url);
+
+      if(pushHistory){
+        // truncate forward history
+        t.history = t.history.slice(0, t.idx + 1);
+        t.history.push(url);
+        t.idx = t.history.length - 1;
+      }
+
+      urlInput.value = url;
+      updateSecurityBadge(url);
+      renderTabs();
+
+      // Try to load in iframe
+      iframe.src = url;
+
+      // If blocked by iframe policy, it often triggers a load but shows error page / blank.
+      // We show a helper UI if it stays blank for a bit.
+      const thisNavId = Math.random().toString(36).slice(2);
+      iframe.dataset.navId = thisNavId;
+
+      setTimeout(() => {
+        if(iframe.dataset.navId !== thisNavId) return;
+        // Heuristic: if external and likely blocked, show message
+        if(/^https?:\/\//i.test(url)){
+          blockedEl.classList.add('show');
+        }
+      }, 1200);
+    }
+
+    backBtn.addEventListener('click', () => {
+      const t = currentTab(); if(!t) return;
+      if(t.idx > 0){
+        t.idx--;
+        t.url = t.history[t.idx];
+        navigate(t.url, {pushHistory:false});
+      }
+    });
+
+    forwardBtn.addEventListener('click', () => {
+      const t = currentTab(); if(!t) return;
+      if(t.idx < t.history.length - 1){
+        t.idx++;
+        t.url = t.history[t.idx];
+        navigate(t.url, {pushHistory:false});
+      }
+    });
+
+    reloadBtn.addEventListener('click', () => {
+      iframe.src = iframe.src;
+    });
+
+    goBtn.addEventListener('click', () => navigate(urlInput.value));
+    urlInput.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter') navigate(urlInput.value);
+    });
+
+    newTabBtn.addEventListener('click', () => createTab('./index.html', 'Home'));
+
+    openNewWindowBtn.addEventListener('click', () => {
+      const t = currentTab(); if(!t) return;
+      window.open(t.url, '_blank', 'noopener,noreferrer');
+    });
+
+    tryAnywayBtn.addEventListener('click', () => {
+      const t = currentTab(); if(!t) return;
+      blockedEl.classList.remove('show');
+      iframe.src = t.url;
+    });
+
+    // init
+    createTab('./index.html', 'Home');
+  </script>
+</body>
+</html>
