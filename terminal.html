@@ -46,7 +46,7 @@ Copyright (c) 2009 Microsoft Corporation.  All rights reserved.
 <span class="help-text">Type 'help' for a list of available commands.</span>
 </div>
     <div id="prompt-line">
-        <span id="prompt">C:\\Users\\Rishav&gt;</span>
+        <span id="prompt">C:\\Users\\Naveen&gt;</span>
         <input type="text" id="input" autofocus autocomplete="off" spellcheck="false">
     </div>
 
@@ -69,10 +69,10 @@ Copyright (c) 2009 Microsoft Corporation.  All rights reserved.
   recycle   - Open Recycle Bin
   github    - Open github
   contact   - Open contact
-  sudo hire rishav - ???
+  sudo hire naveen - ???
   sudo rm -rf system32 - Delete System
   clear     - Clear terminal`,
-            'whoami': `Rishav\nDeveloper / Automation Builder\nHR Tech Tools Creator\nOpen Source Hacker`,
+            'whoami': `Naveen\nData Engineer\nHR Tech Tools Creator\nOpen Source Hacker`,
             'projects': 'Opening projects...',
             'resume': 'Opening resume...',
             'skills': 'Opening skills...',
@@ -94,7 +94,11 @@ Copyright (c) 2009 Microsoft Corporation.  All rights reserved.
 
                 // Echo prompt and command
                 const log = document.createElement('div');
-                log.innerHTML = `<span style="color:#0f0;">C:\\Users\\Rishav&gt;</span> ${outCmd}`;
+                const promptText = document.createElement('span');
+                promptText.style.color = '#0f0';
+                promptText.textContent = 'C:\\Users\\Naveen> ';
+                log.appendChild(promptText);
+                log.appendChild(document.createTextNode(outCmd));
                 output.appendChild(log);
 
                 if (cmd === '') return;
@@ -109,7 +113,7 @@ Copyright (c) 2009 Microsoft Corporation.  All rights reserved.
                 res.style.marginBottom = '10px';
 
                 // Hidden Easter Egg
-                if (cmd === 'sudo hire rishav') {
+                if (cmd === 'sudo hire naveen') {
                     res.innerHTML = '<span style="color: #0f0;">Permission granted.</span><br>Opening resume...';
                     output.appendChild(res);
                     window.scrollTo(0, document.body.scrollHeight);

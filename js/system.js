@@ -307,8 +307,8 @@ const APPS = {
     'notepad': { title: 'Notepad', icon: 'notepad', type: 'iframe', url: 'notepad.html', width: 760, height: 520 },
     'paint': { title: 'Paint', icon: 'paint', type: 'iframe', url: 'paint.html', width: 640, height: 480 },
     'taskmanager': { title: 'Task Manager', icon: 'taskmanager', type: 'iframe', url: 'taskmanager.html', width: 650, height: 550 },
-    'about': { title: 'About RishavOS', icon: 'computer', width: 450, height: 420, type: 'iframe', url: 'about.html' },
-    'github': { title: 'GitHub', icon: 'github', type: 'link', url: 'https://github.com/rishwebb' },
+    'about': { title: 'About NaveenOS', icon: 'computer', width: 450, height: 420, type: 'iframe', url: 'about.html' },
+    'github': { title: 'GitHub', icon: 'github', type: 'link', url: 'https://github.com/nrnnaveen' },
     'contact': { title: 'Contact', icon: 'contact', type: 'iframe', url: 'contact.html' },
     'recycle': { title: 'Recycle Bin', icon: 'recycle', type: 'iframe', url: 'recycle.html', width: 600, height: 420 }
 };
