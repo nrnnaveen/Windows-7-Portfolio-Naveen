@@ -9,5 +9,5 @@ http://nrnnaveen.github.io/Windows-7-Portfolio-Naveen/
 
 - Windows 7-like login and desktop shell
 - Start menu app launcher and taskbar windows
-- Embedded apps: Computer, Projects, Private Projects, Resume, Skills, Terminal, Calculator, Notepad, Paint, Task Manager, About, Contact, Recycle Bin
+- Embedded apps: Computer, Projects, Private Projects, Resume, Skills, Terminal, Calculator, Notepad, Paint, Task Manager, About, Contact, Recycle Bin,Nrn Ai , Mini Games (Featured)
 - External GitHub profile launch from the desktop environment.
